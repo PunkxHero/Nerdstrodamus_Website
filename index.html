@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nerdstrodamus</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #eee;
+    }
+
+    header img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+
+    nav {
+      background-color: #333;
+      display: flex;
+      justify-content: center;
+    }
+
+    nav a {
+      color: white;
+      padding: 14px 20px;
+      text-decoration: none;
+      text-align: center;
+    }
+
+    nav a:hover {
+      background-color: #575757;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .video-section {
+      text-align: center;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    iframe {
+      width: 100%;
+      max-width: 800px;
+      height: 450px;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+
+    <header>
+        <img src="\\TS-462-JKNAS\Nerdstrodamus\Website\Banner.png" alt="Top Banner" class="banner" />
+    </header>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="about_us.html">About Us</a>
+  </nav>
+
+  <div class="container">
+    <div class="video-section">
+      <h2>What's new with the Nerds?</h2>
+      <div id="latest-video">Loading video...</div>
+    </div>
+  </div>
+
+  <script>
+    const apiKey = 'AIzaSyDK_Aw0HxFxeQed2bv7muTVkDeYjUPdXk0'; // Replace with your YouTube API key
+    const channelId = 'UCOVwKj3fzJJlrc-g-C5c0nw'; // Replace with your channel ID
+
+    const apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet&order=date&maxResults=1`;
+
+    fetch(apiUrl)
+      .then(response => response.json())
+      .then(data => {
+        const video = data.items.find(item => item.id.kind === 'youtube#video');
+        if (video) {
+          const videoId = video.id.videoId;
+          const embedHtml = `
+            <iframe
+              src="https://www.youtube.com/embed/${videoId}"
+              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+            </iframe>`;
+          document.getElementById('latest-video').innerHTML = embedHtml;
+        } else {
+          document.getElementById('latest-video').innerHTML = '<p>No recent videos found.</p>';
+        }
+      })
+      .catch(error => {
+        console.error('YouTube API error:', error);
+        document.getElementById('latest-video').innerHTML = '<p>Error loading video.</p>';
+      });
+  </script>
+
+</body>
+</html>
+
+
